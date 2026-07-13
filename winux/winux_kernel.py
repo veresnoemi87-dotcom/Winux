@@ -11,13 +11,15 @@ class WinuxKernel:
     def _sandbox(self, path: str) -> str:
         if not path:
             path = "."
+
         if os.path.isabs(path):
-            full = os.path.abspath(os.path.join(self.root_dir, path.lstrip("/")))
+            full = os.path.abspath(path)
         else:
             full = os.path.abspath(os.path.join(os.getcwd(), path))
 
-        if not full.startswith(self.root_dir):
+        if os.path.commonpath([full, self.root_dir]) != self.root_dir:
             raise PermissionError("Outside sandbox")
+
         return full
 
     # -----------------------------
